@@ -2,32 +2,54 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro; 
 
 public class PlayerScript : MonoBehaviour
 {
     private Rigidbody2D rd2d;
+    private int count;
+
+    public GameObject winTextObject;
     public float speed;
-    public Text score;
-    private int scoreValue = 0;
+    public TextMeshProUGUI CountText;
+
 
 
     // Start is called before the first frame update
     void Start()
     {
+       count = 0; 
+        
        rd2d = GetComponent<Rigidbody2D>(); 
-       score.text = scoreValue.ToString();
+       
+       SetCountText();
+       winTextObject.SetActive(false);
+       
+
+    }
+
+    void SetCountText()
+    {
+        CountText.text = "Count: " + count.ToString();
+        if(count >= 4)
+        {
+            winTextObject.SetActive(true);
+        }
     }
 
     // Update is called once per frame
   
    void Update() 
     {
+        
         if(Input.GetKeyDown(KeyCode.Escape))
         {
             Application.Quit();
         }
     }
   
+
+    
     void FixedUpdate()
     {
         
@@ -42,8 +64,10 @@ public class PlayerScript : MonoBehaviour
         {
             if(collision.collider.tag == "Coin")
             {
-                scoreValue += 1;
-                score.text = scoreValue.ToString();
+                count += 1;
+
+                SetCountText();    
+
                 Destroy(collision.collider.gameObject);
             }
         }
